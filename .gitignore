@@ -1,0 +1,19 @@
+# Linux editors
+.*.sw*
+*~
+
+# Compiled translations
+*.mo
+
+# Python
+.venv
+__pycache__
+
+# Terraform
+.terraform
+.terraform.*
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
+*.tfplan
