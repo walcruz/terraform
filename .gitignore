@@ -1,0 +1,14 @@
+# Linux editors
+.*.sw*
+*~
+
+# Compiled translations
+*.mo
+
+# Python
+.venv
+__pycache__
+
+# Terraform
+.terraform
+.terraform.*
