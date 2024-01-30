@@ -10,7 +10,7 @@ terraform {
 
 ## DATA
 data "keycloak_realm" "admin_realm" {
-    realm = "master"
+  realm = "master"
 }
 
 data "keycloak_openid_client" "realm_management" {
@@ -28,7 +28,7 @@ data "azurerm_key_vault" "keycloak" {
 }
 
 data "azuread_application" "keycloak" {
-  display_name     = length(var.environ) > 0 ? "keycloak-${var.environ}" : "keycloak"
+  display_name = length(var.environ) > 0 ? "keycloak-${var.environ}" : "keycloak"
 }
 
 data "keycloak_role" "offline_access" {
@@ -38,8 +38,8 @@ data "keycloak_role" "offline_access" {
 
 #Data of each client role from realm-management
 data "keycloak_role" "each_realmcr" {
-  for_each = toset(var.realm_management_crole)
-  realm_id = keycloak_realm.appname_realm.id
+  for_each  = toset(var.realm_management_crole)
+  realm_id  = keycloak_realm.appname_realm.id
   client_id = data.keycloak_openid_client.realm_management.id
 
   name = each.value
@@ -47,13 +47,13 @@ data "keycloak_role" "each_realmcr" {
 
 #Pass to idp login
 data "azurerm_key_vault_secret" "keycloak" {
-  key_vault_id = data.azurerm_key_vault.keycloak.id 
-  name = var.kv_name_client_secret
+  key_vault_id = data.azurerm_key_vault.keycloak.id
+  name         = var.kv_name_client_secret
 }
 
 #script-mapper file
 data "template_file" "script_mapper" {
-  template = "${file("../../modules/keycloak/files/scriptMapper.java")}"
+  template = file("../../modules/keycloak/files/scriptMapper.java")
 }
 
 ## RESORUCES - KEYCLOAK
@@ -75,10 +75,10 @@ resource "keycloak_user" "admin_appname" {
 }
 
 resource "keycloak_role" "appname_realm_role" {
-  realm_id = keycloak_realm.appname_realm.id
-  client_id   = keycloak_openid_client.openid_client.id
-  name        = "admin"
-  description = "appname admin realm role"
+  realm_id        = keycloak_realm.appname_realm.id
+  client_id       = keycloak_openid_client.openid_client.id
+  name            = "admin"
+  description     = "appname admin realm role"
   composite_roles = [for i in var.realm_management_crole : data.keycloak_role.each_realmcr[i].id]
 }
 
@@ -125,7 +125,7 @@ resource "keycloak_oidc_identity_provider" "realm_identity_provider" {
 
   extra_config = {
     "clientAuthMethod" = "client_secret_post"
-    "prompt" = "login"
+    "prompt"           = "login"
   }
 }
 
@@ -155,71 +155,71 @@ resource "keycloak_custom_identity_provider_mapper" "koidc" {
 }
 
 resource "keycloak_openid_script_protocol_mapper" "scoped_roles" {
-  realm_id    = keycloak_realm.appname_realm.id
-  client_id   = keycloak_openid_client.openid_client.id
-  name        = "Scoped Roles"
+  realm_id  = keycloak_realm.appname_realm.id
+  client_id = keycloak_openid_client.openid_client.id
+  name      = "Scoped Roles"
 
-  claim_name      = "scoped_roles"
-  script          = data.template_file.script_mapper.rendered
+  claim_name       = "scoped_roles"
+  script           = data.template_file.script_mapper.rendered
   claim_value_type = "JSON"
-  add_to_userinfo = false
+  add_to_userinfo  = false
 }
 
 #Protocol to Invited
 resource "keycloak_openid_user_attribute_protocol_mapper" "invited" {
-  realm_id       = keycloak_realm.appname_realm.id
-  client_id      = keycloak_openid_client.openid_client.id
-  name           = "User Attribute (is Invited)"
+  realm_id  = keycloak_realm.appname_realm.id
+  client_id = keycloak_openid_client.openid_client.id
+  name      = "User Attribute (is Invited)"
 
-  user_attribute = "isinvited"
-  claim_name     = "isinvited"
+  user_attribute   = "isinvited"
+  claim_name       = "isinvited"
   claim_value_type = "JSON"
 }
 
 #Protocol to SA
 resource "keycloak_openid_user_attribute_protocol_mapper" "sa" {
-  realm_id       = keycloak_realm.appname_realm.id
-  client_id      = keycloak_openid_client.openid_client.id
-  name           = "User Attribute (is Service Account)"
+  realm_id  = keycloak_realm.appname_realm.id
+  client_id = keycloak_openid_client.openid_client.id
+  name      = "User Attribute (is Service Account)"
 
-  user_attribute = "isServiceAccount"
-  claim_name     = "isServiceAccount"
+  user_attribute   = "isServiceAccount"
+  claim_name       = "isServiceAccount"
   claim_value_type = "JSON"
 }
 
 #Realm Roles
 resource "keycloak_role" "role_cp_admin" {
-  realm_id = keycloak_realm.appname_realm.id
+  realm_id    = keycloak_realm.appname_realm.id
   name        = "cp:admin"
   description = "Cloud Portal Administrator Role: has access to all opreations within assigned tenant, security and device groups"
 }
 
 resource "keycloak_role" "role_cp_contributor" {
-  realm_id = keycloak_realm.appname_realm.id
+  realm_id    = keycloak_realm.appname_realm.id
   name        = "cp:contributor"
   description = "Cloud Portal Contributor Role"
 }
 
 resource "keycloak_role" "role_cp_reader" {
-  realm_id = keycloak_realm.appname_realm.id
+  realm_id    = keycloak_realm.appname_realm.id
   name        = "cp:reader"
   description = "Cloud Portal Reader Role"
 }
 
 resource "keycloak_role" "role_efa_admin" {
-  realm_id = keycloak_realm.appname_realm.id
+  realm_id    = keycloak_realm.appname_realm.id
   name        = "efa:admin"
   description = "EFA (Edge Fleet Administrator) Admin Role"
 }
 
 resource "keycloak_role" "role_efa_contributor" {
-  realm_id = keycloak_realm.appname_realm.id
+  realm_id    = keycloak_realm.appname_realm.id
   name        = "efa:contributor"
   description = "EFA (Edge Fleet Administrator) Contributor Role"
 }
 
 resource "keycloak_role" "role_efa_reader" {
-  realm_id = keycloak_realm.appname_realm.id
+  realm_id    = keycloak_realm.appname_realm.id
   name        = "efa:reader"
   description = "EFA (Edge Fleet Administrator) Reader Role"
 }

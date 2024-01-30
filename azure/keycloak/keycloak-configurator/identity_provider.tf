@@ -1,6 +1,6 @@
 resource "azuread_application" "example" {
-  display_name     = "example"
-  identifier_uris  = ["api://example-app"]
+  display_name    = "example"
+  identifier_uris = ["api://example-app"]
   #we want put logo there?
   #logo_image       = filebase64("/path/to/logo.png")
   owners           = [data.azuread_client_config.current.object_id]

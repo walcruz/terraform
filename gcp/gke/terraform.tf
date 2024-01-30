@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket = "infrastructure-tfstate-kubecloud-404510"
+    bucket = "tfstate-devops-walter-sre-test"
     prefix = "terraform/gke-state"
   }
 }

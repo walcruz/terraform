@@ -3,9 +3,9 @@ provider "azurerm" {
 }
 
 module "tags" {
-  source = "repogit-tag"
-  environ = var.environ
-  purpose = var.purpose
+  source       = "repogit-tag"
+  environ      = var.environ
+  purpose      = var.purpose
   tags_version = "1.3"
 }
 
@@ -19,8 +19,8 @@ resource "azurerm_storage_account" "terraform" {
 }
 
 resource "azurerm_storage_container" "terraform-container" {
-  for_each                 = toset(["dev", "stg", "prd"])
-  name                     = format("%s-%s-%s", azurerm_storage_account.terraform.name, var.container_name, each.key)
-  storage_account_name     = azurerm_storage_account.terraform.name
-  container_access_type    = "private"
+  for_each              = toset(["dev", "stg", "prd"])
+  name                  = format("%s-%s-%s", azurerm_storage_account.terraform.name, var.container_name, each.key)
+  storage_account_name  = azurerm_storage_account.terraform.name
+  container_access_type = "private"
 }

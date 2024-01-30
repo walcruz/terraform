@@ -1,11 +1,11 @@
 variable "bucket_name" {
   description = "Bucket name variable"
-  default     = "infrastructure-tfstate"
+  default     = "tfstate-devops-walter-sre-test"
 }
 
 variable "project_id" {
   description = "Project ID"
-  default     = "kubecloud-404510"
+  default     = "walter-sre-test"
 }
 
 variable "subnet_name" {
@@ -36,11 +36,11 @@ variable "gke_id" {
 variable "gke_num_nodes" {
   # recomended 3 or more.
   description = "number of gke nodes"
-  default     = 1
+  default     = 3
 }
 
 variable "machine_type" {
   # This e2-micro is a sample for the free tier; however, this machine doesn't support all the basic cluster features.
   description = "Machine type"
-  default     = "e2-micro"
+  default     = "e2-medium"
 }

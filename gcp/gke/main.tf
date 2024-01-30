@@ -1,4 +1,11 @@
 provider "google" {
-  project = "kubecloud-404510"
-  region  = "us-central1"
+  project = var.project_id
+  region  = var.region
+}
+
+data "google_project" "project" {
+}
+
+data "google_service_account" "sa" {
+  account_id = "service-${data.google_project.project.number}"
 }

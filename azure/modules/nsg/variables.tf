@@ -22,6 +22,6 @@ variable "rules" {
 locals {
   nsg_rules_ordered = {
     for order, rule in var.rules
-    : rule.name => merge(rule, {priority: 100 + (order * 5)})
+    : rule.name => merge(rule, { priority : 100 + (order * 5) })
   }
 }

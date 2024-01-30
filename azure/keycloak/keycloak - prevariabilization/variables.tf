@@ -10,27 +10,27 @@ variable "kv_name_client_secret" {
 }
 
 variable "realm_management_crole" {
-    description = "The list of permisions of realm-management"
-    type = list
-    default = [
-        "create-client",
-        "impersonation",
-        "manage-authorization",
-        "manage-clients",
-        "manage-events",
-        "manage-identity-providers",
-        "manage-realm",
-        "manage-users",
-        "query-clients",
-        "query-groups",
-        "query-realms",
-        "query-users",
-        "realm-admin",
-        "view-authorization",
-        "view-clients",
-        "view-events",
-        "view-identity-providers",
-        "view-realm",
-        "view-users"
-    ]
+  description = "The list of permisions of realm-management"
+  type        = list(any)
+  default = [
+    "create-client",
+    "impersonation",
+    "manage-authorization",
+    "manage-clients",
+    "manage-events",
+    "manage-identity-providers",
+    "manage-realm",
+    "manage-users",
+    "query-clients",
+    "query-groups",
+    "query-realms",
+    "query-users",
+    "realm-admin",
+    "view-authorization",
+    "view-clients",
+    "view-events",
+    "view-identity-providers",
+    "view-realm",
+    "view-users"
+  ]
 }

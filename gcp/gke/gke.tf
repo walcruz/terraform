@@ -1,27 +1,21 @@
-locals {
-  subnet_name = "${var.subnet_name}-${var.gke_id}"
-  vpc_name    = "${var.vpc_name}-${var.gke_id}"
-}
-
 module "vpc" {
   source = "../modules/vpc"
 
-  vpc_name = local.vpc_name
+  vpc_name = "${var.vpc_name}-${var.gke_id}"
 }
 
 module "subnet" {
   source = "../modules/subnet"
 
-  subnet_name   = local.subnet_name
+  subnet_name   = "${var.subnet_name}-${var.gke_id}"
   region        = var.region
-  vpc_name      = local.vpc_name
+  vpc_name      = "${var.vpc_name}-${var.gke_id}"
   ip_cidr_range = var.ip_cidr_range
 
   depends_on = [module.vpc]
 }
 
 module "gke" {
-  # to activate: gcloud services enable container.googleapis.com (take 3 minutes)
   source = "../modules/gke"
 
   gke_num_nodes = var.gke_num_nodes
@@ -30,8 +24,10 @@ module "gke" {
   project_id = var.project_id
   region     = var.region
 
-  vpc_name    = local.vpc_name
-  subnet_name = local.subnet_name
+  vpc_name    = "${var.vpc_name}-${var.gke_id}"
+  subnet_name = "${var.subnet_name}-${var.gke_id}"
+
+  sa_id_name = data.google_service_account.sa.email
 
   depends_on = [
     module.vpc,
